@@ -126,13 +126,10 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 				} 
 				break;
 			case "ProcessCall":
-
-				if (value.name.matches("Base64 Decoder \\d")) {
+				if (value.name.matches("Process Call \\d")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for decoder was found", value.name)));
-				} else {
-					System.err.println("NAMEProcessCall:" + value + " in iflow:" + tag.getId());
-				}
+							String.format("Default name %s for Process Call was found", value.name)));
+				} 
 				break;
 			case "XmlValidator":
 				if (value.name.matches("XML Validator \\d")) {
@@ -147,27 +144,21 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 				} 
 				break;
 			case "XMLtoEDIConverter":
-
 				if (value.name.matches("XML to EDI Converter \\d")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag,
 							String.format("Default name %s for XML to EDI Converter was found", value.name)));
-				} else {
-					System.err.println("NAMEProcessCallElement:" + value + " in iflow:" + tag.getId());
 				}
 				break;
 			case "ProcessCallElement":
-				System.err.println("NAMEProcessCallElement:" + value + " in iflow:" + tag.getId());
-				if (value.name.matches("Base64 Decoder \\d")) {
+				if (value.name.matches("Process Call Element \\d")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for decoder was found", value.name)));
+							String.format("Default name %s for Process Call Element was found", value.name)));
 				}
 				break;
 			case "Mapping":
 				if (value.name.matches("Message Mapping \\d")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag,
 							String.format("Default name %s for Mapping was found", value.name)));
-				} else {
-					System.err.println("NAMEMapping:" + value + " in iflow:" + tag.getId());
 				}
 				break;
 
