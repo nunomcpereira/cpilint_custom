@@ -161,7 +161,18 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 							String.format("Default name %s for Mapping was found", value.name)));
 				}
 				break;
-
+			case "XMLToCSVConverter":
+				if (value.name.matches("XML To CSV Converter \\d")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+							String.format("Default name %s for XML To CSV Converter was found", value.name)));
+				}
+				break;
+			case "DBstorage":
+				if (value.name.matches("DB storage \\d")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+							String.format("Default name %s for DB storage was found", value.name)));
+				}
+				break;
 			default:
 				System.err.println("Please check activity type for call activity: " + value.activityType);
 				break;
