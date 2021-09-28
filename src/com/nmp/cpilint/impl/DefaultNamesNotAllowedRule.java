@@ -16,6 +16,50 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmValue;
 
 final class DefaultNamesNotAllowedRule extends RuleBase {
+	private static String[][] simpleActivityTypeRules = { 
+			{ "Enricher", "Content Modifier \\d", "Content Modifier" },
+			{ "ProcessCall", "Process Call \\d", "Process Call" },
+			{ "ProcessCallElement", "Process Call \\d", "Process Call Element" },
+			{ "XmlValidator", "XML Validator \\d", "XML Validator" },
+			{ "EDIValidator", "EDI Validator \\d", "EDI Validator" },
+			{ "XMLtoEDIConverter", "XML to EDI Converter \\d", "XML to EDI Converter" },
+			{ "ProcessCallElement", "Process Call Element \\d", "Process Call Element" },
+			{ "Mapping", "(Message Mapping|Operation Mapping|XSLT Mapping) \\d", "Message Mapping" },
+			{ "XmlToCsvConverter", "XML to CSV Converter \\d", "XML To CSV Converter" },
+			{ "JsonToXmlConverter", "JSON to XML Converter \\d", "JSON to XML Converter" },
+			{ "CsvToXmlConverter", "CSV to XML Converter \\d", "CSV to XML Converter" },
+			{ "XmlToJsonConverter", "XML to JSON Converter \\d", "XmlToJsonConverter" },
+			{ "DBstorage", "(Delete|Get|Select|Write) \\d", "DB storage" }, { "Persist", "Persist \\d", "Persist" },
+			{ "Encoder", "(MIME Multipart Encoder|Base64 Encoder|ZIP Compression|GZIP Compression) \\d", "Encoder" },
+			{ "Decoder", "(GZIP Decompression|ZIP Decompression|Base64 Decoder|MIME Multipart Decoder) \\d", "Decoder" },
+			{ "Filter", "Filter \\d", "Filter" },
+			{ "VerifySign", "PKCS7 Signature Verifier \\d", "PKCS7 Signature Verifier" },
+			{ "EDIExtractor", "EDI Extractor \\d", "EDI Extractor" },
+			{ "EDItoXMLConverter", "EDI to XML Converter \\d", "EDI to XML Converter" },
+			{ "SimpleSignMessage", "Simple Signer \\d", "Simple Signer" },
+			{ "Encrypt", "PKCS7Encryptor \\d", "PKCS7Encryptor" }, { "PgpEncrypt", "PGPEncryptor \\d", "PgpEncrypt" },
+			{ "Decrypt", "PKCS7Decryptor \\d", "Decrypt" }, { "PgpDecrypt", "PGPDecryptor \\d", "PgpDecrypt" },
+			{ "Aggregator", "Aggregator \\d", "Aggregator" }, { "Gather", "Gather \\d", "Gather" },
+			{ "VerifySign", "PKCS7 Signature Verifier \\d", "PKCS7 Signature Verifier" },
+			{ "SimpleSignMessage", "Simple Signer \\d", "Simple Signer" },
+			{ "XMLDigitalSignMessage", "XML Signer \\d", "XML Signer" },
+			{ "SignMessage", "PKCS7 Signer \\d", "PKCS7 Signer" },
+			{ "XmlModifier", "XML Modifier \\d", "XML Modifier" },
+			{ "MessageDigest", "Message Digest \\d", "Message Digest" },
+			{ "XMLDigitalVerifySign", "XML Signature Verifier \\d", "XML Signature Verifier" },
+			{ "Variables", "Write Variables \\d", "Variables" },
+			{ "Splitter",
+					"(EDI Splitter|Zip Splitter|Iterating Splitter|General Splitter|IDoc Splitter|PKCS#7/CMS Splitter|Tar Splitter) \\d",
+					"Splitter" }
+
+	};
+
+	private static String[][] simpleServiceTypeRules = { { "Send", "Send \\d", "Send" },
+			{ "contentEnricherWithLookup", "Content Enricher \\d", "Content Enricher" },
+			{ "PollEnrich", "Poll Enrich \\d", "Poll Enrich" },
+			{ "ExternalCall", "Request Reply \\d", "Request Reply" } };
+	
+
 	private class HandlerXQueryAnswerCallActivity {
 		public String name;
 		public String id;
@@ -86,17 +130,26 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			return;
 		}
 		for (HandlerXQueryAnswerServiceTask value : resultServiceTask) {
-			switch (value.activityType) {
-			case "ExternalCall":
-				if (value.name.matches("Request Reply \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("default name %s for request reply was found", value.name)));
+			boolean handled = false;
+			for (String[] serviceTypeObj : simpleServiceTypeRules) {
+				if (value.activityType == null || serviceTypeObj.length < 3) {
+					continue;
 				}
-				break;
-			default:
-				System.err.println("Please check activity type for service task: " + value.activityType);
-				break;
+				if (value.activityType.equalsIgnoreCase(serviceTypeObj[0])) {
+					if (value.name.matches(serviceTypeObj[1])) {
+						consumer.consume(new NameNotDefaultRequiredIssue(tag,
+								String.format("Default name %s for %s was found", value.name, serviceTypeObj[2])));
+					}
+					handled = true;
+					break;
+				}
 			}
+			if (!handled) {
+				System.err.println("Please check activity type for service task: [" + value.activityType
+						+ "] with name [" + value.name + "]");
+
+			}
+
 		}
 	}
 
@@ -106,78 +159,37 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			return;
 		}
 		for (HandlerXQueryAnswerCallActivity value : result) {
-			switch (value.activityType) {
-			case "Script":
-				if ("GroovyScript".equals(value.subActivityType) && value.name.matches("Groovy Script \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for groovy script was found", value.name)));
+			boolean handled = false;
+			for (String[] activityTypeObj : simpleActivityTypeRules) {
+				if (value.activityType == null || activityTypeObj.length < 3) {
+					continue;
 				}
-				break;
-			case "Decoder":
-				if (value.name.matches("Base64 Decoder \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for decoder was found", value.name)));
+				if (value.activityType.equalsIgnoreCase(activityTypeObj[0])) {
+					if (value.name.matches(activityTypeObj[1])) {
+						consumer.consume(new NameNotDefaultRequiredIssue(tag,
+								String.format("Default name %s for %s was found", value.name, activityTypeObj[2])));
+					}
+					handled = true;
+					break;
 				}
-				break;
-			case "Enricher":
-				if (value.name.matches("Content Modifier \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for Content Modifier was found", value.name)));
-				} 
-				break;
-			case "ProcessCall":
-				if (value.name.matches("Process Call \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for Process Call was found", value.name)));
-				} 
-				break;
-			case "XmlValidator":
-				if (value.name.matches("XML Validator \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for XML Validator was found", value.name)));
-				} 
-				break;
-			case "EDI Validator":
-				if (value.name.matches("EDI Validator \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for EDI Validator was found", value.name)));
-				} 
-				break;
-			case "XMLtoEDIConverter":
-				if (value.name.matches("XML to EDI Converter \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for XML to EDI Converter was found", value.name)));
-				}
-				break;
-			case "ProcessCallElement":
-				if (value.name.matches("Process Call Element \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for Process Call Element was found", value.name)));
-				}
-				break;
-			case "Mapping":
-				if (value.name.matches("Message Mapping \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for Mapping was found", value.name)));
-				}
-				break;
-			case "XMLToCSVConverter":
-				if (value.name.matches("XML To CSV Converter \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for XML To CSV Converter was found", value.name)));
-				}
-				break;
-			case "DBstorage":
-				if (value.name.matches("DB storage \\d")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default name %s for DB storage was found", value.name)));
-				}
-				break;
-			default:
-				System.err.println("Please check activity type for call activity: " + value.activityType);
-				break;
 			}
+			if (!handled) {
+				switch (value.activityType) {
+				case "Script":
+					if ("GroovyScript".equals(value.subActivityType) && value.name.matches("Groovy Script \\d")) {
+						consumer.consume(new NameNotDefaultRequiredIssue(tag,
+								String.format("Default name %s for groovy script was found", value.name)));
+					}
+					break;
+				default:
+					System.err.println("Please check activity type for call activity: [" + value.activityType
+							+ "] with name [" + value.name + "]");
+					break;
+				}
+			}
+
 		}
+
 	}
 
 	private List<HandlerXQueryAnswerCallActivity> mapNodeToCallActivityList(XdmValue callActivityNode) {
