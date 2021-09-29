@@ -8,7 +8,7 @@ declare function local:valCallActivity($mf as element(bpmn2:callActivity), $k as
 };
 
 
-for $callActivity in /bpmn2:definitions/bpmn2:process/bpmn2:callActivity
+for $callActivity in //bpmn2:callActivity
 let $activityTypeCallActivity := local:valCallActivity($callActivity, "activityType")
 let $subActivityTypeCallActivity := local:valCallActivity($callActivity, "subActivityType")
 

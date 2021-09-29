@@ -7,7 +7,7 @@ declare function local:valServiceTask($mf as element(bpmn2:serviceTask), $k as x
     $mf/bpmn2:extensionElements/ifl:property[key = $k]/value
 };
 
-for $serviceTask in /bpmn2:definitions/bpmn2:process/bpmn2:serviceTask
+for $serviceTask in //bpmn2:serviceTask
 let $activityTypeServiceTask := local:valServiceTask($serviceTask, "activityType")
 
 return (string($serviceTask/@name), string($serviceTask/@id), string($activityTypeServiceTask))

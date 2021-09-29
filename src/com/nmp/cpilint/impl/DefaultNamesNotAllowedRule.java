@@ -16,8 +16,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmValue;
 
 final class DefaultNamesNotAllowedRule extends RuleBase {
-	private static String[][] simpleActivityTypeRules = { 
-			{ "Enricher", "Content Modifier \\d", "Content Modifier" },
+	private static String[][] simpleActivityTypeRules = { { "Enricher", "Content Modifier \\d", "Content Modifier" },
 			{ "ProcessCall", "Process Call \\d", "Process Call" },
 			{ "ProcessCallElement", "Process Call \\d", "Process Call Element" },
 			{ "XmlValidator", "XML Validator \\d", "XML Validator" },
@@ -31,7 +30,8 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			{ "XmlToJsonConverter", "XML to JSON Converter \\d", "XmlToJsonConverter" },
 			{ "DBstorage", "(Delete|Get|Select|Write) \\d", "DB storage" }, { "Persist", "Persist \\d", "Persist" },
 			{ "Encoder", "(MIME Multipart Encoder|Base64 Encoder|ZIP Compression|GZIP Compression) \\d", "Encoder" },
-			{ "Decoder", "(GZIP Decompression|ZIP Decompression|Base64 Decoder|MIME Multipart Decoder) \\d", "Decoder" },
+			{ "Decoder", "(GZIP Decompression|ZIP Decompression|Base64 Decoder|MIME Multipart Decoder) \\d",
+					"Decoder" },
 			{ "Filter", "Filter \\d", "Filter" },
 			{ "VerifySign", "PKCS7 Signature Verifier \\d", "PKCS7 Signature Verifier" },
 			{ "EDIExtractor", "EDI Extractor \\d", "EDI Extractor" },
@@ -58,7 +58,19 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			{ "contentEnricherWithLookup", "Content Enricher \\d", "Content Enricher" },
 			{ "PollEnrich", "Poll Enrich \\d", "Poll Enrich" },
 			{ "ExternalCall", "Request Reply \\d", "Request Reply" } };
-	
+
+	private class HandlerXQueryAnswerProcesses {
+		public String name;
+		public String id;
+
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("\nName: [").append(name).append("] ");
+			sb.append("Id: [").append(id).append("]\n ");
+			return sb.toString();
+		}
+	}
 
 	private class HandlerXQueryAnswerCallActivity {
 		public String name;
@@ -105,6 +117,64 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		XdmValue serviceTaskNode = iflowXml.executeXquery(xqueryForDefaultNamesNotAllowedRuleServiceTask());
 		List<HandlerXQueryAnswerServiceTask> resultServiceTask = mapNodeToCallServiceTask(serviceTaskNode);
 		processServiceTask(resultServiceTask, consumer, tag);
+
+		XdmValue processesNode = iflowXml.executeXquery(xqueryForDefaultNamesNotAllowedRuleProcess());
+		List<HandlerXQueryAnswerProcesses> resultProcesses = mapNodeToProcesses(processesNode);
+		processProcesses(resultProcesses, consumer, tag);
+
+	}
+
+	private void processProcesses(List<HandlerXQueryAnswerProcesses> resultProcesses, IssueConsumer consumer,
+			IflowArtifactTag tag) {
+		if (resultProcesses == null) {
+			return;
+		}
+		for (HandlerXQueryAnswerProcesses value : resultProcesses) {
+			boolean handled = false;
+
+			if (value.id == null) {
+				continue;
+			}
+			if (value.id.startsWith("SubProcess")) {
+//				if (value.name.matches("Exception Subprocess \\d")) {
+//					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+//							String.format("Default name %s for %s was found", value.name, "Exception")));
+//				}
+				handled = true;
+			}
+			if (value.id.startsWith("Process")) {
+				if (value.name.matches("(Integration Process \\d)")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+							String.format("Default name %s for %s was found", value.name, "Integration Process")));
+				}
+				else if (value.name.matches("(Local Integration Process|Local Integration Process \\d)")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag, String
+							.format("Default name %s for %s was found", value.name, "Local Integration Process")));
+				}
+				handled = true;
+			}
+			if (!handled) {
+				System.err.println("Please check rules for: [" + value.id + "] with name [" + value.name
+						+ "] on iflow [" + tag + "]");
+
+			}
+
+		}
+	}
+
+	private List<HandlerXQueryAnswerProcesses> mapNodeToProcesses(XdmValue processesNode) {
+		List<HandlerXQueryAnswerProcesses> result = new ArrayList<>();
+		HandlerXQueryAnswerProcesses currentValue = new HandlerXQueryAnswerProcesses();
+		for (XdmItem value : processesNode) {
+			if (currentValue.name == null) {
+				currentValue.name = value.getStringValue();
+			} else if (currentValue.id == null) {
+				currentValue.id = value.getStringValue();
+				result.add(currentValue);
+				currentValue = new HandlerXQueryAnswerProcesses();
+			}
+		}
+		return result;
 	}
 
 	private List<HandlerXQueryAnswerServiceTask> mapNodeToCallServiceTask(XdmValue serviceTaskNode) {
@@ -217,6 +287,10 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 
 	public String xqueryForDefaultNamesNotAllowedRuleServiceTask() {
 		return JarResourceUtil.loadXqueryResource("default-names-not-allowed-rule-servicetask.xquery");
+	}
+
+	public String xqueryForDefaultNamesNotAllowedRuleProcess() {
+		return JarResourceUtil.loadXqueryResource("default-names-not-allowed-rule-process.xquery");
 	}
 
 }
