@@ -128,8 +128,9 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			for (ArtifactResource resource : resources) {
 				String name = resource.getName() != null ? resource.getName() : "";
 				if (name.toLowerCase().matches("script\\d.groovy")) {
-					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-							String.format("Default filename %s for %s was found", ArtifactResourceType.GROOVY_SCRIPT)));
+					consumer.consume(
+							new NameNotDefaultRequiredIssue(tag, String.format("Default filename %s for %s was found",
+									name, ArtifactResourceType.GROOVY_SCRIPT.getName())));
 				}
 			}
 		}
