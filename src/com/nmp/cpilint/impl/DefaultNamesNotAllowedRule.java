@@ -1,9 +1,12 @@
 package com.nmp.cpilint.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import dk.mwittrock.cpilint.IflowXml;
+import dk.mwittrock.cpilint.artifacts.ArtifactResource;
+import dk.mwittrock.cpilint.artifacts.ArtifactResourceType;
 import dk.mwittrock.cpilint.artifacts.IflowArtifact;
 import dk.mwittrock.cpilint.artifacts.IflowArtifactTag;
 import dk.mwittrock.cpilint.consumers.IssueConsumer;
@@ -104,8 +107,6 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		}
 	}
 
-	private static String[][] defaultNames = { {}, {} };
-
 	@Override
 	public void inspect(IflowArtifact iflow) {
 		IflowXml iflowXml = iflow.getIflowXml();
@@ -122,6 +123,16 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		List<HandlerXQueryAnswerProcesses> resultProcesses = mapNodeToProcesses(processesNode);
 		processProcesses(resultProcesses, consumer, tag);
 
+		Collection<ArtifactResource> resources = iflow.getResourcesByType(ArtifactResourceType.GROOVY_SCRIPT);
+		if (resources != null) {
+			for (ArtifactResource resource : resources) {
+				String name = resource.getName() != null ? resource.getName() : "";
+				if (name.toLowerCase().matches("script\\d.groovy")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+							String.format("Default filename %s for %s was found", ArtifactResourceType.GROOVY_SCRIPT)));
+				}
+			}
+		}
 	}
 
 	private void processProcesses(List<HandlerXQueryAnswerProcesses> resultProcesses, IssueConsumer consumer,
@@ -136,18 +147,17 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 				continue;
 			}
 			if (value.id.startsWith("SubProcess")) {
-//				if (value.name.matches("Exception Subprocess \\d")) {
-//					consumer.consume(new NameNotDefaultRequiredIssue(tag,
-//							String.format("Default name %s for %s was found", value.name, "Exception")));
-//				}
+				// if (value.name.matches("Exception Subprocess \\d")) {
+				// consumer.consume(new NameNotDefaultRequiredIssue(tag,
+				// String.format("Default name %s for %s was found", value.name, "Exception")));
+				// }
 				handled = true;
 			}
 			if (value.id.startsWith("Process")) {
 				if (value.name.matches("(Integration Process \\d)")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag,
 							String.format("Default name %s for %s was found", value.name, "Integration Process")));
-				}
-				else if (value.name.matches("(Local Integration Process|Local Integration Process \\d)")) {
+				} else if (value.name.matches("(Local Integration Process|Local Integration Process \\d)")) {
 					consumer.consume(new NameNotDefaultRequiredIssue(tag, String
 							.format("Default name %s for %s was found", value.name, "Local Integration Process")));
 				}
