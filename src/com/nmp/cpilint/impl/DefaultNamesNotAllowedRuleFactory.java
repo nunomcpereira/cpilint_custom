@@ -1,5 +1,9 @@
 package com.nmp.cpilint.impl;
+
 import dk.mwittrock.cpilint.rules.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.dom4j.Element;
 
@@ -15,7 +19,8 @@ public final class DefaultNamesNotAllowedRuleFactory implements RuleFactory {
 		if (!canCreateFrom(e)) {
 			throw new RuleFactoryError(String.format("Cannot create Rule object from element '%s'", e.getName()));
 		}
-		return new DefaultNamesNotAllowedRule();
+		List<String> exclusions = e.elements("exclude").stream().map(n -> n.getText()).collect(Collectors.toList());
+		return new DefaultNamesNotAllowedRule(exclusions);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.nmp.cpilint.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dk.mwittrock.cpilint.IflowXml;
@@ -10,15 +11,19 @@ import dk.mwittrock.cpilint.artifacts.ArtifactResourceType;
 import dk.mwittrock.cpilint.artifacts.IflowArtifact;
 import dk.mwittrock.cpilint.artifacts.IflowArtifactTag;
 import dk.mwittrock.cpilint.consumers.IssueConsumer;
-import dk.mwittrock.cpilint.issues.IflowDescriptionRequiredIssue;
-import dk.mwittrock.cpilint.model.XmlModel;
-import dk.mwittrock.cpilint.model.XmlModelFactory;
 import dk.mwittrock.cpilint.rules.RuleBase;
 import dk.mwittrock.cpilint.util.JarResourceUtil;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmValue;
 
 final class DefaultNamesNotAllowedRule extends RuleBase {
+
+	private List<String> exclusionList;
+
+	public DefaultNamesNotAllowedRule(List<String> exclusionList) {
+		this.exclusionList = exclusionList == null ? Collections.emptyList() : exclusionList;
+	}
+
 	private static String[][] simpleActivityTypeRules = { { "Enricher", "Content Modifier \\d", "Content Modifier" },
 			{ "ProcessCall", "Process Call \\d", "Process Call" },
 			{ "ProcessCallElement", "Process Call \\d", "Process Call Element" },
@@ -144,14 +149,15 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		for (HandlerXQueryAnswerProcesses value : resultProcesses) {
 			boolean handled = false;
 
-			if (value.id == null) {
+			if (value.id == null || isExcluded(value.id)) {
+				handled = true;
 				continue;
 			}
 			if (value.id.startsWith("SubProcess")) {
-				// if (value.name.matches("Exception Subprocess \\d")) {
-				// consumer.consume(new NameNotDefaultRequiredIssue(tag,
-				// String.format("Default name %s for %s was found", value.name, "Exception")));
-				// }
+				if (value.name.matches("Exception Subprocess \\d") && !isExcluded("Exception Subprocess")) {
+					consumer.consume(new NameNotDefaultRequiredIssue(tag,
+							String.format("Default name %s for %s was found", value.name, "Exception")));
+				}
 				handled = true;
 			}
 			if (value.id.startsWith("Process")) {
@@ -171,6 +177,17 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 			}
 
 		}
+	}
+
+	private boolean isExcluded(String id) {
+		if (exclusionList.size() == 0) {
+			return false;
+		}
+		boolean result = exclusionList.contains(id);
+		if (result) {
+			System.out.println(String.format("Element [%s] is being ignored by the rules", id));
+		}
+		return result;
 	}
 
 	private List<HandlerXQueryAnswerProcesses> mapNodeToProcesses(XdmValue processesNode) {
@@ -213,7 +230,8 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		for (HandlerXQueryAnswerServiceTask value : resultServiceTask) {
 			boolean handled = false;
 			for (String[] serviceTypeObj : simpleServiceTypeRules) {
-				if (value.activityType == null || serviceTypeObj.length < 3) {
+				if (value.activityType == null || serviceTypeObj.length < 3 || isExcluded(value.activityType)) {
+					handled = true;
 					continue;
 				}
 				if (value.activityType.equalsIgnoreCase(serviceTypeObj[0])) {
@@ -242,7 +260,8 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 		for (HandlerXQueryAnswerCallActivity value : result) {
 			boolean handled = false;
 			for (String[] activityTypeObj : simpleActivityTypeRules) {
-				if (value.activityType == null || activityTypeObj.length < 3) {
+				if (value.activityType == null || activityTypeObj.length < 3 || isExcluded(value.activityType)) {
+					handled = true;
 					continue;
 				}
 				if (value.activityType.equalsIgnoreCase(activityTypeObj[0])) {
