@@ -65,7 +65,8 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 	private static String[][] simpleServiceTypeRules = { { "Send", "Send \\d", "Send" },
 			{ "contentEnricherWithLookup", "Content Enricher \\d", "Content Enricher" },
 			{ "PollEnrich", "Poll Enrich \\d", "Poll Enrich" },
-			{ "ExternalCall", "Request Reply \\d", "Request Reply" } };
+			{ "ExternalCall", "Request Reply \\d", "Request Reply" },
+			{ "ExclusiveGateway", "Router \\d", "Router" } };
 
 	private class HandlerXQueryAnswerProcesses {
 		public String name;
