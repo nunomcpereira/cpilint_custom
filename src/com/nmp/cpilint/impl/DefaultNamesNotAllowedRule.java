@@ -140,6 +140,17 @@ final class DefaultNamesNotAllowedRule extends RuleBase {
 				}
 			}
 		}
+		resources = iflow.getResourcesByType(ArtifactResourceType.XSLT_MAPPING);
+		if (resources != null) {
+			for (ArtifactResource resource : resources) {
+				String name = resource.getName() != null ? resource.getName() : "";
+				if (name.toLowerCase().matches("xsltmapping\\d.xsl")||name.toLowerCase().matches("xsltmapping\\d.xslt")) {
+					consumer.consume(
+							new NameNotDefaultRequiredIssue(tag, String.format("Default filename %s for %s was found",
+									name, ArtifactResourceType.XSLT_MAPPING.getName())));
+				}
+			}
+		}
 	}
 
 	private void processProcesses(List<HandlerXQueryAnswerProcesses> resultProcesses, IssueConsumer consumer,
