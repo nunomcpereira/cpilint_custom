@@ -7,5 +7,8 @@
 		<iflow-matches-name>
 		  <naming-pattern>FER_([S2P|F2I|M2C]_)*([IDOC,ODATA]_)*(.*)[Publisher|Subscribe|MAIN]</naming-pattern>
 		</iflow-matches-name>
+		<unused-parameters-rule>
+			<exclude>Target_PreventDirectoryTransversal1</exclude>
+		</unused-parameters-rule>
     </rules>
 </cpilint>
