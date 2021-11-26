@@ -12,12 +12,21 @@ import net.sf.saxon.s9api.XdmValue;
 final class AllowedHeadersEmptyRule extends RuleBase {
 
 	private List<String> exclusionList;
+	private List<String> inclusionList;
+	private boolean exclusionMode = true;
 
-	public AllowedHeadersEmptyRule(List<String> exclusionList) {
+	public AllowedHeadersEmptyRule(List<String> exclusionList, List<String> inclusionList) {
 		this.exclusionList = exclusionList == null ? Collections.emptyList() : exclusionList;
-		if (this.exclusionList.size() == 0) {
+		this.inclusionList = inclusionList == null ? Collections.emptyList() : inclusionList;
+		if (this.exclusionList.size() != 0) {
+			exclusionMode = true;
 			System.out.println(String.format("Allowed headers empty created with the following exclusion list [%s]",
 					String.join(",", exclusionList)));
+		}
+		if (this.inclusionList.size() != 0) {
+			exclusionMode = false;
+			System.out.println(String.format("Allowed headers empty created with the following inclusion list [%s]",
+					String.join(",", inclusionList)));
 		}
 	}
 
@@ -29,9 +38,19 @@ final class AllowedHeadersEmptyRule extends RuleBase {
 		System.err.println(result);
 		if (result.isEmpty()) {
 			boolean isExcluded = false;
-			for (String line : exclusionList) {
-				if (tag.getId().matches(line)) {
-					isExcluded = true;
+			if (exclusionMode) {
+				isExcluded = false;
+				for (String line : exclusionList) {
+					if (tag.getId().matches(line)) {
+						isExcluded = true;
+					}
+				}
+			} else {
+				isExcluded = true;
+				for (String line : inclusionList) {
+					if (tag.getId().matches(line)) {
+						isExcluded = false;
+					}
 				}
 			}
 			if (!isExcluded) {
