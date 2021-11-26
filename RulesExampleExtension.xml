@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <cpilint>
-    <rules>
-        <default-names-not-allowed-rule>
+	<rules>
+		<default-names-not-allowed-rule>
 			<exclude>Exception Subprocess</exclude>
 		</default-names-not-allowed-rule>
 		<iflow-matches-name>
-		  <naming-pattern>FER_([S2P|F2I|M2C]_)*([IDOC,ODATA]_)*(.*)[Publisher|Subscribe|MAIN]</naming-pattern>
+			<naming-pattern>FER_([S2P|F2I|M2C]_)*([IDOC,ODATA]_)*(.*)[Publisher|Subscribe|MAIN]
+			</naming-pattern>
 		</iflow-matches-name>
-		<unused-parameters-rule>
+		<!-- <unused-parameters-rule>
 			<exclude>OData_QueryOptions</exclude>
 			<exclude>a:OData_QueryOptions</exclude>
-		</unused-parameters-rule>
-    </rules>
+		</unused-parameters-rule>-->
+		<allowed-headers-empty><exclude>(.*)MAIN</exclude></allowed-headers-empty>
+	</rules>
 </cpilint>

@@ -39,8 +39,10 @@ final class UnusedParametersRule extends RuleBase {
 
 	public UnusedParametersRule(List<String> exclusionList) {
 		this.exclusionList = exclusionList == null ? Collections.emptyList() : exclusionList;
-		System.out.println(String.format("Unused rule created with the following exclusion list [%s]",
-				String.join(",", exclusionList)));
+		if (this.exclusionList.size() > 0) {
+			System.out.println(String.format("Unused rule created with the following exclusion list [%s]",
+					String.join(",", exclusionList)));
+		}
 	}
 
 	@Override
@@ -98,7 +100,7 @@ final class UnusedParametersRule extends RuleBase {
 								externalParamName, String.join(", ", exclusionList)));
 						continue;
 					}
-					if (exclusionList.contains(tag.getName() + ":" + externalParamName)) {
+					if (exclusionList.contains(tag.getId() + ":" + externalParamName)) {
 						System.out.println(String.format("Parameter [%s] is iflow excluded from exclusion list [%s]",
 								externalParamName, String.join(", ", exclusionList)));
 						continue;

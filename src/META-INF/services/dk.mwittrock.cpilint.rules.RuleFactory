@@ -1,2 +1,3 @@
 com.nmp.cpilint.impl.DefaultNamesNotAllowedRuleFactory
 com.nmp.cpilint.impl.UnusedParametersRuleFactory
+com.nmp.cpilint.impl.AllowedHeadersEmptyRuleFactory
