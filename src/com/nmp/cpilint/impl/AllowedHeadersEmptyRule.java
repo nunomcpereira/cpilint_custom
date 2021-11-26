@@ -35,7 +35,6 @@ final class AllowedHeadersEmptyRule extends RuleBase {
 		IflowArtifactTag tag = iflow.getTag();
 		XdmValue result = iflow.getIflowXml().evaluateXpath(
 				"//bpmn2:collaboration/bpmn2:extensionElements/ifl:property[key='allowedHeaderList']/value/text()");
-		System.err.println(result);
 		if (result.isEmpty()) {
 			boolean isExcluded = false;
 			if (exclusionMode) {
