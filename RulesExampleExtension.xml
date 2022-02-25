@@ -13,5 +13,6 @@
 			<exclude>a:OData_QueryOptions</exclude>
 		</unused-parameters-rule>-->
 		<allowed-headers-empty><include>(.*)(Publisher|Subscribe)$</include></allowed-headers-empty>
+		<response-headers-allowed><exclude>\*</exclude></response-headers-allowed>
 	</rules>
 </cpilint>
