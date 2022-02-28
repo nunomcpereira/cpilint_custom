@@ -55,12 +55,17 @@ final class UndeclaredContentModifierDatatypeRule extends RuleBase {
 					String type = null;
 					String datatype = null;
 					for (String pair : sequenceValue) {
+						String[] split = pair.split(":");
+						if(split.length<3)
+						{
+							continue;
+						}
 						if (pair.startsWith("Name")) {
-							name = pair.split(":")[2];
+							name = split[2];
 						} else if (pair.startsWith("Type")) {
-							type = pair.split(":")[2];
+							type = split[2];
 						} else if (pair.startsWith("Datatype")) {
-							datatype = pair.split(":")[2];
+							datatype = split[2];
 						}
 					}
 					if ("expression".equalsIgnoreCase(type) && (datatype == null || "".equals(datatype.trim()))) {
