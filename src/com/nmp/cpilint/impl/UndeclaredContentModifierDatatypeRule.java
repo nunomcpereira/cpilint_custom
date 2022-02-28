@@ -67,7 +67,7 @@ final class UndeclaredContentModifierDatatypeRule extends RuleBase {
 						consumer.consume(new UndeclaredContentModifierDatatypeIssue(tag, String.format(
 								"iflow [%s] has a content modifier of type [%s] with variable [%s] defined without datatype",
 								tag.getId(), type, name)));
-					} 
+					}  
 					continue;
 				}
 				// Parse the document.
