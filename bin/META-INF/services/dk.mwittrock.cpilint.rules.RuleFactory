@@ -2,4 +2,4 @@ com.nmp.cpilint.impl.DefaultNamesNotAllowedRuleFactory
 com.nmp.cpilint.impl.UnusedParametersRuleFactory
 com.nmp.cpilint.impl.AllowedHeadersEmptyRuleFactory
 com.nmp.cpilint.impl.ResponseHeadersAllRuleFactory
-com.nmp.cpilint.impl.UndeclaredContentModifierDatatypeRuleFactory 
+com.nmp.cpilint.impl.UndeclaredContentModifierDatatypeRuleFactory
