@@ -14,5 +14,6 @@
 		</unused-parameters-rule>-->
 		<allowed-headers-empty><include>(.*)(Publisher|Subscribe)$</include></allowed-headers-empty>
 		<response-headers-allowed><exclude>\*</exclude></response-headers-allowed>
+		<undeclared-data-type></undeclared-data-type>
 	</rules>
 </cpilint>
