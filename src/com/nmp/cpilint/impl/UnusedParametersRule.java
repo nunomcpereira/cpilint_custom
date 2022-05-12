@@ -139,7 +139,7 @@ final class UnusedParametersRule extends RuleBase {
 	}
 
 	private boolean isExternalParameterBeingUsed(String externalParamName, IflowArtifact iflow) throws IOException {
-		String patternString = ".*\\b" + externalParamName + "\\b.*";
+		String patternString = "\\b" + externalParamName + "\\b";
 		Pattern pattern = Pattern.compile(patternString);
 		for (ArtifactResourceType entry : ArtifactResourceType.values()) {
 			if (entry.equals(ArtifactResourceType.EXTERNAL_PARAMETERS) || entry.equals(ArtifactResourceType.EDMX)
@@ -148,6 +148,7 @@ final class UnusedParametersRule extends RuleBase {
 			}
 			Collection<ArtifactResource> resources = iflow.getResourcesByType(entry);
 			for (ArtifactResource resource : resources) {
+				
 				String fileInStrFormat = loadFileInStringFormat(resource.getName(), resource.getContents());
 				if (entry.equals(ArtifactResourceType.IFLOW)) {
 					if (fileInStrFormat.contains("{{" + externalParamName + "}}")) {
