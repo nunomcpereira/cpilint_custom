@@ -11,7 +11,7 @@ import dk.mwittrock.cpilint.rules.RuleFactoryError;
 
 public final class CsrfProtectionRequiredWithExcludeRuleFactory implements RuleFactory {
 
-	@Override
+	@Override 
 	public boolean canCreateFrom(Element e) {
 		return e.getName().equals("csrf-protection-required-with-exclude");
 	}

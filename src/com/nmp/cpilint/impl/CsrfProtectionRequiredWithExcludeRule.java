@@ -18,7 +18,7 @@ import dk.mwittrock.cpilint.rules.XpathRulesUtil;
 import net.sf.saxon.s9api.XdmNode;
 
 final class CsrfProtectionRequiredWithExcludeRule extends RuleBase {
-	private List<String> exclusionList;
+	private List<String> exclusionList; 
 	private List<String> inclusionList;
 	private boolean exclusionMode = true;
 	
