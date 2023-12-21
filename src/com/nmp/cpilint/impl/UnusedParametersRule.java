@@ -134,7 +134,7 @@ final class UnusedParametersRule extends RuleBase {
 		if (scanner.hasNext())
 			data = scanner.next();
 		scanner.close();
-		fileNameFileContentCache.put(filename, data);
+		fileNameFileContentCache.put(new String(filename), data);
 		return data;
 	}
 
@@ -148,6 +148,10 @@ final class UnusedParametersRule extends RuleBase {
 			}
 			Collection<ArtifactResource> resources = iflow.getResourcesByType(entry);
 			for (ArtifactResource resource : resources) {
+				if (entry.equals(ArtifactResourceType.IFLOW)) {
+					int i=0;
+					i++;
+				}
 				
 				String fileInStrFormat = loadFileInStringFormat(resource.getName(), resource.getContents());
 				if (entry.equals(ArtifactResourceType.IFLOW)) {

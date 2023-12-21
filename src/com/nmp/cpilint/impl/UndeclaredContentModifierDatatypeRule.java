@@ -44,6 +44,11 @@ final class UndeclaredContentModifierDatatypeRule extends RuleBase {
 				if (xmlValue == null) {
 					continue;
 				}
+				if (xmlValue.equals(
+						"<row><cell id='Action'>Create</cell><cell id='Type'>expression</cell><cell id='Value'>exported=true&status=approved&bill-to-address[country][code][in]=${property.FER_CountryCode}&invoice-date[gt_or_eq]=${property.FER_InvoiceStartDate}</cell><cell id='Default'></cell><cell id='Name'>loop_query</cell><cell id='Datatype'>java.lang.String</cell></row><row><cell id='Action'>Create</cell><cell id='Type'>expression</cell><cell id='Value'>&invoice-date[lt_or_eq]=${property.FER_InvoiceEndDate}&tags[name][not_eq]=SOVOS_SUCCESS</cell><cell id='Default'></cell><cell id='Name'>loop_query_2</cell><cell id='Datatype'>java.lang.String</cell></row><row><cell id='Action'>Create</cell><cell id='Type'>constant</cell><cell id='Value'>GET</cell><cell id='Default'></cell><cell id='Name'>loop_method</cell><cell id='Datatype'>java.lang.String</cell></row><row><cell id='Action'>Create</cell><cell id='Type'>constant</cell><cell id='Value'>COUPA_DEV01</cell><cell id='Default'></cell><cell id='Name'>loop_private_key</cell><cell id='Datatype'>java.lang.String</cell></row><row><cell id='Action'>Create</cell><cell id='Type'>constant</cell><cell id='Value'>https://ferring-dev.coupahost.com/api/invoices</cell><cell id='Default'></cell><cell id='Name'>loop_address</cell><cell id='Datatype'>java.lang.String</cell></row><row><cell id='Action'>Create</cell><cell id='Type'>constant</cell><cell id='Value'></cell><cell id='Default'></cell><cell id='Name'>loop_sub_address</cell><cell id='Datatype'>java.lang.String</cell></row>")) {
+					int i = 0;
+					i++;
+				}
 				xmlValue = xmlValue.trim();
 				if ("".equals(xmlValue)) {
 					continue;
@@ -56,8 +61,7 @@ final class UndeclaredContentModifierDatatypeRule extends RuleBase {
 					String datatype = null;
 					for (String pair : sequenceValue) {
 						String[] split = pair.split(":");
-						if(split.length<3)
-						{
+						if (split.length < 3) {
 							continue;
 						}
 						if (pair.startsWith("Name")) {
@@ -72,16 +76,20 @@ final class UndeclaredContentModifierDatatypeRule extends RuleBase {
 						consumer.consume(new UndeclaredContentModifierDatatypeIssue(tag, String.format(
 								"iflow [%s] has a content modifier of type [%s] with variable [%s] defined without datatype",
 								tag.getId(), type, name)));
-					}  
+					}
 					continue;
 				}
+				//we don't care about the value itself, sometimes the value might contain special characters that would need to be xml encoded such as &, so no need for that checks when all is needed is to check the type
+				xmlValue = xmlValue.replaceAll("<cell id='Value'>(.*)</cell>","<cell id='Value'></cell>");
 				// Parse the document.
 				Processor p = new Processor(false);
 				XdmNode docRoot;
+				String rootedXmlValue = null;
 				try {
-					xmlValue = "<root>" + xmlValue + "</root>";
+					rootedXmlValue = "<root>" + xmlValue + "</root>";
 					docRoot = p.newDocumentBuilder()
-							.build(new StreamSource(new ByteArrayInputStream(xmlValue.getBytes())));
+							.build(new StreamSource(new ByteArrayInputStream(rootedXmlValue.getBytes())));
+				
 					XPathCompiler xpathCompiler = p.newXPathCompiler();
 					XdmValue typeAndDatatypePair = xpathCompiler
 							.evaluate("//cell[@id='Name' or @id='Datatype' or @id='Type']", docRoot);

@@ -4,3 +4,4 @@ com.nmp.cpilint.impl.AllowedHeadersEmptyRuleFactory
 com.nmp.cpilint.impl.ResponseHeadersAllRuleFactory
 com.nmp.cpilint.impl.UndeclaredContentModifierDatatypeRuleFactory
 com.nmp.cpilint.impl.CsrfProtectionRequiredWithExcludeRuleFactory
+com.nmp.cpilint.impl.IflowNameMatchesRuleFactory
