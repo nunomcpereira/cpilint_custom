@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<cpilint>
+    <rules>FER_Common_IDocAcknowledgment_S4
+        <default-names-not-allowed-rule>
+			<exclude>Exception Subprocess</exclude>
+		</default-names-not-allowed-rule>
+		<iflow-matches-name>
+		  <naming-pattern>FER_(S2P|FnA|FIN|F2I|M2C|COM|LEGAL|Common|InterfaceName|MessageMappingsUnitTest|GQA|H2R|MD|RnD|CRM|CPI|Batch|Customer|DIMA|Done|ExchangeRates|FirmedPlanned|Forecast|GlobalPart|KinaxisRR|OnHand|Part|PlannedOrder|PlannedParameters|S4_IDOC_LogPayload|SalesOrder|SendAlert|Shipment|SnOP|Source|Supplier|ForceIflow|Domain|ExecuteSQLPSA|FetchCPITraces|JDBCHealthCheck|EchoResponse|ReprocessingAutomation|Salesforce|IDocAcknowledgment)(.*)(Publish|Subscribe|MAIN|Retry_SFTP|_TPM_ReceiverCommunication|_TPM_SenderIDOCCommunication|_S4|_Salesforce_SOQL|_Salesforce_CustomObjectUpsert|_Salesforce_Credentials|_Salesforce_TPM_PartnerDirectoryXSLTMapping|_TPM_MAGReplacement|_DynamicInterfaceTransformAndRoute|_TPM_SenderAS2Communication|_TPM_SenderAS2ToIDOCCommunication|_TPM_PartnerDirectoryXSLTMapping|_Veeva_User|_LookupValues|_UserRoleValues|Coupa_SyncExported|ErrorHandler|ErrorNotification|EventMesh_DeadMessageQueueHandler|EventMesh_ErrorQueueHandler|TPM_InterchangeProcessing|_Template|Test|Tool|Notification|ErroneousRecordsHandler|LastLoadUpdate|Publish_RUN|Subscribe_RUN|MAIN_RUN|Retry_SFTP_RUN|_LookupValues_RUN|_UserRoleValues_RUN|Coupa_SyncExported_RUN|ErrorHandler_RUN|ErrorNotification_RUN|_Template_RUN|Test_RUN|Tool_RUN|Notification_RUN|ErroneousRecordsHandler_RUN|LastLoadUpdate_RUN|_TPM_ReceiverCommunication_RUN|_TPM_SenderIDOCCommunication_RUN|_TPM_PartnerDirectoryXSLTMapping_RUN|_TPM_MAGReplacement_RUN|_DynamicInterfaceTransformAndRoute_RUN|_TPM_SenderAS2Communication_RUN|_TPM_SenderAS2ToIDOCCommunication_RUN|EventMesh_DeadMessageQueueHandler_RUNr|EventMesh_ErrorQueueHandler_RUN|TPM_InterchangeProcessing_RUN|_Salesforce_CustomRequest)$</naming-pattern>
+		  <!--<naming-pattern>FER_(S2P|FnA|F2I|M2C|Common|InterfaceName|MessageMappingsUnitTest|GQA|H2R|MD|RnD|CRM|CPI|SendAlert_Error)(.*)(Publish|Subscribe|MAIN|Retry_SFTP|_LookupValues|_UserRoleValues|Coupa_SyncExported|ErrorHandler|ErrorNotification|_Template|Test|Tool|Notification)$</naming-pattern>-->
+		  <!--<naming-pattern>FER_(S2P|FnA|F2I|M2C|Common|InterfaceName|MessageMappingsUnitTest|GQA|H2R|MD|RnD|CRM|CPI|Batch|Customer|DIMA|Done|ExchangeRates|FirmedPlanned|Forecast|GlobalPart|KinaxisRR|OnHand|Part|PlannedOrder|PlannedParameters|S4_IDOC_LogPayload|SalesOrder|SendAlert|Shipment|SnOP|Source|Supplier|ForceIflow|Domain)(.*)(Publish|Subscribe|MAIN|Retry_SFTP|_LookupValues|_UserRoleValues|Coupa_SyncExported|ErrorHandler|ErrorNotification|_Template|Test|Tool|Notification)$</naming-pattern>-->
+		</iflow-matches-name>
+		<disallowed-scripting-languages>
+            <disallow>javascript</disallow>
+        </disallowed-scripting-languages>
+		<cleartext-basic-auth-not-allowed/>
+		<!-- <matching-process-direct-channels-required/> We can't use this since we have cross package references and cpilint runs on a package basis -->
+		<disallowed-receiver-adapters>
+			<disallow>facebook</disallow>
+			<disallow>ftp</disallow>
+			<disallow>twitter</disallow>
+		</disallowed-receiver-adapters>
+		<disallowed-sender-adapters>
+			<disallow>ftp</disallow>
+		</disallowed-sender-adapters>
+		<unencrypted-data-store-write-not-allowed/>
+		<unencrypted-endpoints-not-allowed/>
+		<csrf-protection-required-with-exclude>
+			<exclude>FER_S2P_AutoIndirectPOReceipt_MAIN</exclude>
+			<exclude>FER_S2P_InvoiceApprovalStatus_MAIN</exclude>
+			<exclude>FER_CRM_ConsentAccounts_MAIN</exclude>
+			<exclude>FER_COM_MagicLinkAccounts_MAIN</exclude>
+			<exclude>FER_COM_ConsentAccounts_MAIN</exclude>
+			<exclude>FER_FIN_InvoiceArchiving_MAIN</exclude>
+			<exclude>FER_S2P_InvoiceApprovalStatus_MAIN_RUN</exclude>
+			<exclude>FER_CRM_ConsentAccounts_MAIN_RUN</exclude>
+			<exclude>FER_COM_MagicLinkAccounts_MAIN_RUN</exclude>
+			<exclude>FER_COM_ConsentAccounts_MAIN_RUN</exclude>
+			<exclude>FER_FIN_InvoiceArchiving_MAIN_RUN</exclude>
+			<!--Uncomment if you need additional entries
+			<exclude>FER_S2P_InvoiceApprovalStatus_MAIN1</exclude>
+			-->
+		</csrf-protection-required-with-exclude>
+		<iflow-description-required/>
+		<unused-parameters-rule/>
+		<allowed-headers-empty><include>(.*)(Publish|Subscribe)$</include></allowed-headers-empty>
+		<response-headers-allowed><exclude>\*</exclude></response-headers-allowed>
+		<undeclared-data-type/>
+    </rules>
+</cpilint>
