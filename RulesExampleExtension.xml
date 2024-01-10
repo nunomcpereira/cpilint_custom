@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<cpilint>
+	<rules>
+		<default-names-not-allowed-rule>
+			<exclude>Exception Subprocess</exclude>
+		</default-names-not-allowed-rule>
+		<!-- <unused-parameters-rule>
+			<exclude>OData_QueryOptions</exclude>
+			<exclude>a:OData_QueryOptions</exclude>
+		</unused-parameters-rule>-->
+		<allowed-headers-empty><include>(.*)(Publisher|Subscribe)$</include></allowed-headers-empty>
+		<response-headers-allowed><exclude>\*</exclude></response-headers-allowed>
+		<undeclared-data-type></undeclared-data-type>
+	</rules>
+</cpilint>
