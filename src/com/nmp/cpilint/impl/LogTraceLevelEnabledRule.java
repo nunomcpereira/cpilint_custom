@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -30,11 +32,19 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import dk.mwittrock.cpilint.IflowXml;
+import dk.mwittrock.cpilint.IflowXmlError;
 import dk.mwittrock.cpilint.artifacts.ArtifactResource;
 import dk.mwittrock.cpilint.artifacts.ArtifactResourceType;
 import dk.mwittrock.cpilint.artifacts.IflowArtifact;
 import dk.mwittrock.cpilint.artifacts.IflowArtifactTag;
 import dk.mwittrock.cpilint.rules.RuleBase;
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XPathCompiler;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmSequenceIterator;
+import net.sf.saxon.s9api.XdmValue;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,8 +74,8 @@ final class LogTraceLevelEnabledRule extends RuleBase {
 			fileNameFileContentCache = new HashMap<>();
 			currentTagBeingAnalysed = tag;
 		}
-
-		if(logBodyScriptExists(iflow) && !logTraceLevelEnabledExists(iflow)){
+		logTraceLevelEnabledPropertyExists(iflow);
+		if(logBodyScriptExists(iflow) && (!logTraceLevelEnabledParameterExists(iflow) || !logTraceLevelEnabledPropertyExists(iflow))){
 			if (exclusionList.contains(tag.getId())) {
 				System.out.println(String.format("Iflow [%s] is excluded from exclusion list [%s]",
 						tag.getId(), String.join(", ", exclusionList)));
@@ -73,12 +83,20 @@ final class LogTraceLevelEnabledRule extends RuleBase {
 			}
 			
 			consumer.consume(new LogTraceLevelEnabledIssue(tag,
-					String.format("External parameter [%s] does not exist despite being required by the logBody.groovy script", "FER_LogTraceLevelEnabled")));
+					String.format("External parameter and/or property [%s] does not exist despite being required by the logBody.groovy script", "FER_LogTraceLevelEnabled")));
 		}
 
 	}
+	public boolean logTraceLevelEnabledPropertyExists(IflowArtifact iflow) {
+		String properties = (iflow.getIflowXml()
+				.evaluateXpath("//bpmn2:callActivity/bpmn2:extensionElements/ifl:property/value[contains(., 'FER_LogTraceLevelEnabled')]")).toString();
+		if("".equals(properties)|| null == properties) {
+			return false;
+		}
+		return true;
+	}
 
-	public boolean logTraceLevelEnabledExists(IflowArtifact iflow) {
+	public boolean logTraceLevelEnabledParameterExists(IflowArtifact iflow) {
 		IflowArtifactTag tag = iflow.getTag();
 		Collection<ArtifactResource> externalParameters = iflow
 				.getResourcesByType(ArtifactResourceType.EXTERNAL_PARAMETERS);
