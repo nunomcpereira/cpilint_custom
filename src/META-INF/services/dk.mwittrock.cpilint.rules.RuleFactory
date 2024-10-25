@@ -6,3 +6,5 @@ com.nmp.cpilint.impl.UndeclaredContentModifierDatatypeRuleFactory
 com.nmp.cpilint.impl.CsrfProtectionRequiredWithExcludeRuleFactory
 com.nmp.cpilint.impl.IflowNameMatchesRuleFactory
 com.nmp.cpilint.impl.LogTraceLevelEnabledRuleFactory
+com.nmp.cpilint.impl.DisallowedExpressionsRuleFactory
+com.nmp.cpilint.impl.DisallowedXPathPropertyOnFilterRuleFactory

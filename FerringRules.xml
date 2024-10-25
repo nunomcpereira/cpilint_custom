@@ -46,5 +46,14 @@
 		<response-headers-allowed><exclude>\*</exclude></response-headers-allowed>
 		<undeclared-data-type/>
 		<log-trace-level-enabled-rule/>
+		<disallowed-expressions>
+			<disallow>${in.body}</disallow>
+			<disallow>getHeader</disallow>
+			<disallow>VEEVA_DEV01</disallow>
+		</disallowed-expressions>
+		<disallowed-filter-xpath-property>
+			<disallow>\/\/records\[1\]</disallow>
+			<disallow>\/\/CaseRequest</disallow>
+		</disallowed-filter-xpath-property>
     </rules>
 </cpilint>
