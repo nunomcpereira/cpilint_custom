@@ -47,8 +47,8 @@
 		<undeclared-data-type/>
 		<log-trace-level-enabled-rule/>
 		<disallowed-expressions>
-			<disallow>${in.body}</disallow>
-			<disallow>getHeader</disallow>
+			<disallow>\$\{in\.body\}</disallow>
+			<disallow>get.*eader</disallow>
 			<disallow>VEEVA_DEV01</disallow>
 		</disallowed-expressions>
 		<disallowed-filter-xpath-property>

@@ -59,16 +59,17 @@ final class DisallowedExpressionsRule extends RuleBase {
 		Collection<ArtifactResource> resources = iflow.getResourcesByType(ArtifactResourceType.GROOVY_SCRIPT);
 		for (String disallowedExpression : disallowedExpressionsList) {
 			//check in iflow steps
-			if(iflowXmlString.contains(disallowedExpression)){
+			if(Pattern.compile(disallowedExpression).matcher(iflowXmlString).find()) {
 				consumer.consume(new DisallowedExpressionsIssue(tag,
 					String.format("Disallowed Expression [%s] was found", disallowedExpression)));
 			}
 			//check in scripts
+			System.out.println("#######################################################");
 			if (resources != null) {
 				for (ArtifactResource resource : resources) {
 					try {
 						String groovyContentsStr = loadFileInStringFormat(resource.getName(), resource.getContents());
-						if(groovyContentsStr.contains(disallowedExpression)) {
+						if(Pattern.compile(disallowedExpression).matcher(groovyContentsStr).find()) {
 							consumer.consume(new DisallowedExpressionsIssue(tag,
 									String.format("Disallowed Expression [%s] was found in [%s]", disallowedExpression, resource.getName())));
 						}
@@ -83,7 +84,7 @@ final class DisallowedExpressionsRule extends RuleBase {
 			for (ArtifactResource externalParam : externalParameters) {
 				try {
 					String parameterContentsStr = loadFileInStringFormat(externalParam.getName(), externalParam.getContents());
-					if(parameterContentsStr.contains(disallowedExpression)) {
+					if(Pattern.compile(disallowedExpression).matcher(parameterContentsStr).find()) {
 						consumer.consume(new DisallowedExpressionsIssue(tag,
 								String.format("Disallowed Expression [%s] was found in external parameters", disallowedExpression)));
 					}
