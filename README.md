@@ -191,13 +191,20 @@ Any user role not listed is allowed.
 
 ### default-names-not-allowed-rule
 Since CPI has no concept of comments for each component, we want to make sure that we have meaningful names on components that describe the logic of the iflow, so we check that for all possible CPI components we don't have default names such as "Content Modifier 1", "Content Modifier 2", "Request Reply 1" naming or "groovy1" for filenames
-
+The rule is configured as follows:
+```xml
+<default-names-not-allowed-rule>
+	<exclude>Exception Subprocess</exclude>
+</default-names-not-allowed-rule>
+```
 ### iflow-matches-name
 Defines the rules for the iflow names
-
-### disallowed-scripting-languages
-You can specify which programming languages cannot be used
-
+The rule is configured as follows:
+```xml
+<iflow-matches-name>
+		  <naming-pattern>FER_(S2P|FnA|FIN|F2I|M2C|COM|LEGAL|Common|InterfaceName|MessageMappingsUnitTest|GQA|H2R|MD|RnD|CRM|CPI|Batch|Customer|DIMA|Done|ExchangeRates|FirmedPlanned|Forecast|GlobalPart|KinaxisRR|OnHand)(?:_RUN)?$</naming-pattern>
+</iflow-matches-name>
+```
 ### cleartext-basic-auth-not-allowed
 In order to comply with this rule, an integration flow cannot contain receiver channels, that are configured with basic authentication over unencrypted HTTP.
 The rule is configured as follows:
@@ -220,7 +227,13 @@ The rule is configured as follows:
 ```
 ### csrf-protection-required-with-exclude
 Specify which iflows will not need to use csrf protection
-
+The rule is configured as follows:
+```xml
+<csrf-protection-required-with-exclude>
+	<exclude>FER_S2P_AutoIndirectPOReceipt_MAIN</exclude>
+	<exclude>FER_S2P_InvoiceApprovalStatus_MAIN</exclude>
+</csrf-protection-required-with-exclude>
+```
 ### iflow-description-required
 With this rule, you can ensure that all your integration flows have a description.
 The rule is configured as follows:
@@ -229,15 +242,33 @@ The rule is configured as follows:
 ```
 ### unused-parameters-rule
 How many times have you defined some external parameters that in the end were not used? CPI provides the "Remove unused parameters" button which would work in a similar fashion as this rule. This rule just asserts that all your defined parameters are being used
-
+The rule is configured as follows:
+```xml
+<unused-parameters-rule/>
+```
 ### allowed-headers-empty
 We have main iflows (reached from outside) and internal iflows communicating via process direct. In both scenarios, the "Allowed headers" setting being empty might be a problem because the headers would get lost between process direct calls if so. In case of main iflows, there are some headers that we allow to receive like the SapAuthenticatedUserName for instance. Right now according to our rule configuration we're only validating on purpose the communications via process direct, not making it mandatory to receive headers on the main iflow but this is configurable on the rule
+The rule is configured as follows:
+```xml
+<allowed-headers-empty>
+    <include>(.*)(Publish|Subscribe)$</include>
+</allowed-headers-empty>
+```
 
 ### response-headers-allowed
 During developments, we were faced with an issue where a target system was called and returned an invalid header for CPI. I don't remember the details but if I recall it was because the header exceeds the maximum size that CPI can handle. With this error, we learn not to accept * by default on the response headers of our http calls. This rule is enforcing that
-
+The rule is configured as follows:
+```xml
+<response-headers-allowed>
+    <exclude>\*</exclude>
+</response-headers-allowed>
+```
 ### undeclared-data-type
 During developments we realized that we had a property defined on a content modifier without a type specified and for that particular scenario this resulted on a runtime error since CPI assumed that the property was somehow a complex object when we wanted it to be a regular String. So this rule checks all your properties and make sure that for the ones asking for a type (which is not mandatory on cpi), enforces it to be filled in when checking it via this rule
+The rule is configured as follows:
+```xml
+<undeclared-data-type/>
+```
 
 ### log-trace-level-enabled-rule
 Set the rule if the FER_LogTraceLevelEnabled property must exist in the iflows
