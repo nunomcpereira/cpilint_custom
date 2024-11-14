@@ -6,14 +6,15 @@ This is an extension of the original cpilint application that adds some addition
 ### matching-process-direct-channels-required
 This rule ensures that for every ProcessDirect receiver channel, there is a sender channel with the same address.
 The rule is configured as follows:
-
+```xml
 <matching-process-direct-channels-required/>
-
+```
 ### multi-condition-type-routers-not-allowed
 To comply with this rule, an integration flow cannot contain Router steps configured with both XML and non-XML conditions.
 The rule is configured as follows:
-
+```xml
 <multi-condition-type-routers-not-allowed/>
+```
 
 ### allowed-receiver-adapters
 Using this rule, you can make sure that only specific receiver adapters are used in your integration flows.
@@ -24,86 +25,97 @@ The rule can be configured in two different ways. To specify an allow list of re
     <allow>soap</allow>
     <allow>rfc</allow>
 </allowed-receiver-adapters>
+
 ```
 Any receiver adapter not listed is not allowed. To instead specify a deny list of receiver adapters, configure the rule as follows:
-
+```xml
 <disallowed-receiver-adapters>
     <disallow>odata</disallow>
     <disallow>soap</disallow>
     <disallow>rfc</disallow>
 </disallowed-receiver-adapters>
+```
 
 ### allowed-scripting-languages
 Using this rule, you can specify which scripting languages are allowed in your integration flows and which are not.
 The rule can be configured in two different ways. To specify an allow list of scripting languages, configure the rule as follows:
-
+```xml
 <allowed-scripting-languages>
     <allow>groovy</allow>
 </allowed-scripting-languages>
+```
 Any scripting language not listed is not allowed. To instead specify a deny list of scripting languages, configure the rule as follows:
-
+```xml
 <disallowed-scripting-languages>
     <disallow>groovy</disallow>
 </disallowed-scripting-languages>
+```
 
 ### allowed-sender-adapters
 Using this rule, you can make sure that only specific sender adapters are used in your integration flows.
 
 The rule can be configured in two different ways. To specify an allow list of sender adapters, configure the rule as follows:
-
+```xml
 <allowed-sender-adapters>
     <allow>https</allow>
     <allow>idoc</allow>
     <allow>sftp</allow>
 </allowed-sender-adapters>
+```
 
 Any sender adapter not listed is not allowed. To instead specify a deny list of sender adapters, configure the rule as follows:
-
+```xml
 <disallowed-sender-adapters>
     <disallow>https</disallow>
     <disallow>idoc</disallow>
     <disallow>sftp</disallow>
 </disallowed-sender-adapters>
+```
 
 ### allowed-xslt-versions
 Using this rule, you can make sure that only specific XSLT versions are used in your integration flows.
 The rule can be configured in two different ways. To specify an allow list of XSLT versions, configure the rule as follows:
-
+```xml
 <allowed-xslt-versions>
     <allow>2.0</allow>
     <allow>3.0</allow>
 </allowed-xslt-versions>
+```
 Any XSLT version not listed is not allowed. To instead specify a deny list of XSLT versions, configure the rule as follows:
-
+```xml
 <disallowed-xslt-versions>
     <disallow>1.0</disallow>
 </disallowed-xslt-versions>
+```
 
 ### client-cert-sender-channel-auth-not-allowed
 To comply with this rule, an integration flow cannot contain sender channels with client certificates configured directly in the channel.
 The rule is configured as follows:
-
+```xml
 <client-cert-sender-channel-auth-not-allowed/>
+```
 
 ### csrf-protection-required
 Using this rule, you can ensure that HTTPS sender channels in your integration flows all employ CSRF protection.
 The rule is configured as follows:
-
+```xml
 <csrf-protection-required/>
+```
 
 ### allowed-mapping-types
 Using this rule, you can make sure that only specific mapping types are used in your integration flows.
 The rule can be configured in two different ways. To specify an allow list of mapping types, configure the rule as follows:
-
+```xml
 <allowed-mapping-types>
     <allow>message-mapping</allow>
 </allowed-mapping-types>
+```
 Any mapping type not listed is not allowed. To instead specify a deny list of mapping types, configure the rule as follows:
-
+```xml
 <disallowed-mapping-types>
     <disallow>xslt-mapping</disallow>
 </disallowed-mapping-types>
-
+```
 Any mapping type not listed is allowed.
 
 The supported mapping type values are:
@@ -115,15 +127,17 @@ xslt-mapping
 ### allowed-java-archives
 Using this rule, you can specify which Java archives are allowed in your integration flows and which are not.
 The rule can be configured in two different ways. To specify an allow list of Java archives, configure the rule as follows:
-
+```xml
 <allowed-java-archives>
     <allow>jsoup-*.jar</allow>
 </allowed-java-archives>
+```
 Any Java archive not listed is not allowed. If no Java archive names are specified, no archives are allowed. To instead specify a deny list of Java archives, configure the rule as follows:
-
+```xml
 <disallowed-java-archives>
     <disallow>jsoup-*.jar</disallow>
 </disallowed-java-archives>
+```
 Any Java archive not listed is allowed.
 
 Wildcards are supported in archive names. * matches any number of characters (including no characters) and ? matches a single character.
@@ -134,11 +148,12 @@ Using this rule, you can specify which Java archives are allowed in your integra
 ### duplicate-resources-not-allowed
 With this rule, you can indicate that your integration flows should not contain duplicate resources, i.e. identical resources that appear in multiple integration flows.
 The rule is configured as follows:
-
+```xml
 <duplicate-resources-not-allowed>
     <resource-type>groovy-script</resource-type>
     <resource-type>javascript-script</resource-type>
 </duplicate-resources-not-allowed>
+```
 The following resource type values are supported:
 
 message-mapping
@@ -159,17 +174,19 @@ Please also note that the DuplicateResourcesNotAllowed rule doesn't distinguish 
 ### allowed-user-roles
 The UserRoles rule lets you specify which user roles should and should not be used in sender channels that support user role authorization.
 The rule can be configured in two different ways. To specify an allow list of user roles, configure the rule as follows:
-
+```xml
 <allowed-user-roles>
     <allow>ExampleRole</allow>
     <allow>AnotherExampleRole</allow>
 </allowed-user-roles>
+```
 Any user role not listed is not allowed. To instead specify a deny list of user roles, configure the rule as follows:
-
+```xml
 <disallowed-user-roles>
     <disallow>ExampleRole</disallow>
     <disallow>AnotherExampleRole</disallow>
 </disallowed-user-roles>
+```
 Any user role not listed is allowed.
 
 ### default-names-not-allowed-rule
@@ -184,32 +201,32 @@ You can specify which programming languages cannot be used
 ### cleartext-basic-auth-not-allowed
 In order to comply with this rule, an integration flow cannot contain receiver channels, that are configured with basic authentication over unencrypted HTTP.
 The rule is configured as follows:
-
+```xml
 <cleartext-basic-auth-not-allowed/>
-
+```
 
 ### unencrypted-data-store-write-not-allowed
 With this rule, you can make sure that all data store writes performed in your integration flows are encrypted.
 
 The rule is configured as follows:
-
+```xml
 <unencrypted-data-store-write-not-allowed/>
-
+```
 ### unencrypted-endpoints-not-allowed
 In order to comply with this rule, an integration flow cannot contain receiver channels, that are configured with unencrypted HTTP endpoints.
 The rule is configured as follows:
-
+```xml
 <unencrypted-endpoints-not-allowed/>
-
+```
 ### csrf-protection-required-with-exclude
 Specify which iflows will not need to use csrf protection
 
 ### iflow-description-required
 With this rule, you can ensure that all your integration flows have a description.
 The rule is configured as follows:
-
+```xml
 <iflow-description-required/>
-
+```
 ### unused-parameters-rule
 How many times have you defined some external parameters that in the end were not used? CPI provides the "Remove unused parameters" button which would work in a similar fashion as this rule. This rule just asserts that all your defined parameters are being used
 
@@ -225,23 +242,24 @@ During developments we realized that we had a property defined on a content modi
 ### log-trace-level-enabled-rule
 Set the rule if the FER_LogTraceLevelEnabled property must exist in the iflows
 The rule is configured as follows:
-
+```xml
 <log-trace-level-enabled-rule/>
-
+```
 ### disallowed-expressions
 Specify which regular expressions cannot be used in the iflow and scripts and external parameters.
 The rule is configured as follows:
-
+```xml
 <disallowed-expressions>
 	<disallow>\$\{in\.body\}</disallow>
 	<disallow>get.*eader</disallow>
 </disallowed-expressions>
-
+```
 ### disallowed-filter-xpath-property
 Specify which regular expression cannot be used inside the Filter object
 The rule is configured as follows:
-
+```xml
 <disallowed-filter-xpath-property>
 	<disallow>\/\/records\[1\]</disallow>
 	<disallow>\/\/CaseRequest</disallow>
 </disallowed-filter-xpath-property>
+```
