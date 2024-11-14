@@ -18,13 +18,13 @@ The rule is configured as follows:
 ### allowed-receiver-adapters
 Using this rule, you can make sure that only specific receiver adapters are used in your integration flows.
 The rule can be configured in two different ways. To specify an allow list of receiver adapters, configure the rule as follows:
-
+```xml
 <allowed-receiver-adapters>
     <allow>odata</allow>
     <allow>soap</allow>
     <allow>rfc</allow>
 </allowed-receiver-adapters>
-
+```
 Any receiver adapter not listed is not allowed. To instead specify a deny list of receiver adapters, configure the rule as follows:
 
 <disallowed-receiver-adapters>
