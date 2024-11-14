@@ -142,9 +142,6 @@ Any Java archive not listed is allowed.
 
 Wildcards are supported in archive names. * matches any number of characters (including no characters) and ? matches a single character.
 
-### disallowed-java-archives
-Using this rule, you can specify which Java archives are allowed in your integration flows and which are not.
-
 ### duplicate-resources-not-allowed
 With this rule, you can indicate that your integration flows should not contain duplicate resources, i.e. identical resources that appear in multiple integration flows.
 The rule is configured as follows:
