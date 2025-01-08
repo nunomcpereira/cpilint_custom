@@ -55,5 +55,15 @@
 			<disallow>\/\/records\[1\]</disallow>
 			<disallow>\/\/CaseRequest</disallow>
 		</disallowed-filter-xpath-property>
+		<header-format>
+			<rule>
+				<activationDate>10-05-2020</activationDate>
+				<ruleExpression>^FER_.*</ruleExpression>
+			</rule>
+			<rule>
+				<activationDate>13-02-2020</activationDate>
+				<ruleExpression>^FER2_.*</ruleExpression>
+			</rule>
+		</header-format>
     </rules>
 </cpilint>
