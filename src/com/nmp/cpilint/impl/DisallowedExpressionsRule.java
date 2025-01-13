@@ -56,6 +56,8 @@ final class DisallowedExpressionsRule extends RuleBase {
 			currentTagBeingAnalysed = tag;
 		}
 		String iflowXmlString = new BufferedReader(new InputStreamReader(iflow.getIflowXml().getRawDocument())).lines().collect(Collectors.joining("\n"));
+		Collection<ArtifactResource> iflowObject = iflow.getResourcesByType(ArtifactResourceType.IFLOW);
+		System.out.println(iflowObject);
 		Collection<ArtifactResource> resources = iflow.getResourcesByType(ArtifactResourceType.GROOVY_SCRIPT);
 		for (String disallowedExpression : disallowedExpressionsList) {
 			//check in iflow steps
@@ -64,7 +66,6 @@ final class DisallowedExpressionsRule extends RuleBase {
 					String.format("Disallowed Expression [%s] was found", disallowedExpression)));
 			}
 			//check in scripts
-			System.out.println("#######################################################");
 			if (resources != null) {
 				for (ArtifactResource resource : resources) {
 					try {

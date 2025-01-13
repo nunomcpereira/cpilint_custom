@@ -56,7 +56,6 @@ final class DisallowedXPathPropertyOnFilterRule extends RuleBase {
 			fileNameFileContentCache = new HashMap<>();
 			currentTagBeingAnalysed = tag;
 		}
-		System.out.println("#######################################################");
 		XdmValue result = iflow.getIflowXml().evaluateXpath(
 				"//bpmn2:extensionElements[ifl:property[key='activityType' and value='Filter']]/ifl:property[key='wrapContent']/value/text()");
 		String[] lines = result.toString().split("\n");
