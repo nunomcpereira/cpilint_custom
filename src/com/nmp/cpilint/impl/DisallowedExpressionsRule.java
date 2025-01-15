@@ -57,7 +57,6 @@ final class DisallowedExpressionsRule extends RuleBase {
 		}
 		String iflowXmlString = new BufferedReader(new InputStreamReader(iflow.getIflowXml().getRawDocument())).lines().collect(Collectors.joining("\n"));
 		Collection<ArtifactResource> iflowObject = iflow.getResourcesByType(ArtifactResourceType.IFLOW);
-		System.out.println(iflowObject);
 		Collection<ArtifactResource> resources = iflow.getResourcesByType(ArtifactResourceType.GROOVY_SCRIPT);
 		for (String disallowedExpression : disallowedExpressionsList) {
 			//check in iflow steps
