@@ -51,6 +51,9 @@
 			<disallow>get.*eader</disallow>
 			<disallow>VEEVA_DEV01</disallow>
 		</disallowed-expressions>
+		<external-parameters-naming-convention>
+			<naming-pattern>^[a-zA-Z0-9 _-]+$</naming-pattern>
+		</external-parameters-naming-convention>
 		<disallowed-filter-xpath-property>
 			<disallow>\/\/records\[1\]</disallow>
 			<disallow>\/\/CaseRequest</disallow>

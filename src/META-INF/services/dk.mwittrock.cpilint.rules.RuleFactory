@@ -10,3 +10,4 @@ com.nmp.cpilint.impl.DisallowedExpressionsRuleFactory
 com.nmp.cpilint.impl.DisallowedXPathPropertyOnFilterRuleFactory
 com.nmp.cpilint.impl.HeaderFormatRuleFactory
 com.nmp.cpilint.impl.PropertyFormatRuleFactory
+com.nmp.cpilint.impl.ExternalParametersNamingConventionRuleFactory
