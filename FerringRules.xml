@@ -80,5 +80,11 @@
 				<ruleExpression>^FER2_.*</ruleExpression>
 			</rule>
 		</property-format>
+		<!-- SAP built-in design guidelines check via API.
+		     Requires environment variables:
+		       CPILINT_DG_BASE_URL, CPILINT_DG_AUTH_URL,
+		       CPILINT_DG_CLIENT_ID, CPILINT_DG_CLIENT_SECRET
+		-->
+		<design-guidelines-check/>
     </rules>
 </cpilint>
